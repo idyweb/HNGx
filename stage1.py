@@ -31,7 +31,7 @@ def slack_details():
     result = {
         'slack_name': slack_name,
         'current_day': current_day,
-        'current_utc_time': current_time_str,
+        'utc_time': current_time_str,
         'track': track,
         'github_file_url': github_url_file,
         'github_repo_url': github_url_source,
