@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from datetime import datetime
 import pytz 
 
@@ -14,11 +14,15 @@ def slack_details():
     current_day = datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos')).strftime('%A')
     current_time = datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos'))
     allowed_time_window = 2  # +/- 2 minutes
-    current_time_str = current_time.strftime('%H:%M:%S')
+    current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S')
 
     time_window = current_time.replace(second=0, microsecond=0) - datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos')).replace(second=0, microsecond=0)
     time_window_in_minutes = abs(time_window.total_seconds()) / 60
-    current_datetime = datetime.now()
+
+     # Validate the time window
+    if time_window_in_minutes > allowed_time_window:
+        return({'error': 'Time validation failed. UTC time is not within +/- 2 minutes.'}), 400
+    
     
     github_url_file =  'https://github.com/idyweb/HNGx/blob/master/stage1.py'
     github_url_source= 'https://github.com/idyweb/HNGx'
@@ -34,7 +38,7 @@ def slack_details():
         'status_code': 200
 
     }
-    return result
+    return jsonify(result)
 
 
 if __name__ == '__main__':
