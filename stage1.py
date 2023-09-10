@@ -12,9 +12,11 @@ def slack_details():
     slack_name = request.args.get('slack_name')
     track = request.args.get('track')
     current_day = datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos')).strftime('%A')
-    current_time = datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos'))
+    current_time = datetime.now(pytz.utc)
     allowed_time_window = 2  # +/- 2 minutes
-    current_time_str = current_time.isoformat() + 'Z'
+
+    current_time_str = current_time.strftime('%Y-%m-%dT%H:%M:%SZ')
+
 
     time_window = current_time.replace(second=0, microsecond=0) - datetime.now(pytz.utc).astimezone(pytz.timezone('Africa/Lagos')).replace(second=0, microsecond=0)
     time_window_in_minutes = abs(time_window.total_seconds()) / 60
